@@ -1,6 +1,6 @@
 FROM ubuntu:focal
 
-# Configuration needed for tzdata & timezone
+# Configuration needed for timezone
 ENV TZ=Asia/Tokyo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -16,11 +16,6 @@ RUN apt-get install qemu-system-misc=1:4.2-3ubuntu6 -y
 
 # Fix error with virtualization & qemu
 RUN apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst virt-manager -y
-
-# clone xv6 repo
-#WORKDIR /usr/src/app
-#RUN git clone git://github.com/mit-pdos/xv6-public.git 
-#RUN cd xv6-public
 
 #WORKDIR /usr/src/app/xv6-public
 WORKDIR xv6

@@ -1,1 +1,2 @@
-sudo docker build -t xv6 .
+IMAGE_NAME=xv6
+sudo docker build -t $IMAGE_NAME .
