@@ -9,7 +9,7 @@
 - gcc 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.12)
 
 ## How this works?
-
+The idea is to use main branch as a baseline and start building the kernel using independent branches
 
 
 ## Running locally
@@ -23,7 +23,7 @@ Timezone environmental variable is needed.
 
 
 ### Building the image
-Start by modifying the image name if necesssary
+Start by modifying the image name if necessary
 ``` bash
 # build.sh
 IMAGE_NAME=xv6 # The image name we want to create
