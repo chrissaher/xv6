@@ -1,27 +1,55 @@
 
 // pong.c: “ping-pong” a byte between two processes
 
-#include "types.h"
-#include "user.h"
-#include "fcntl.h"
-
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include<unistd.h>
+#include<time.h>
 
 int
-main(void)
+main()
 {
-  int n, pid;
-  int fds[2];
-  char buf[100];
+  char buff[100];
 
-  // create a pipe, with two FDs in fds[0], fds[1].
-  pipe(fds);
+  int p1[2], p2[2];
+  pipe(p1); pipe(p2);
 
-  pid = fork();
-  if (pid == 0) {
-    write(fds[1], "this is pipe2\n", 14);
+  clock_t start, end, i;
+  double rtt;
+
+  const int MAXITER = 100000;
+  write(p2[1], "*", 1);
+  if(fork() == 0) {
+    close(p1[1]);
+    close(p2[0]);
+    start = clock();
+    for(i = 0; i < MAXITER; ++i) {
+      if(read(p1[0], buff, sizeof(buff)) > 0) {
+        write(p2[1], buff, sizeof(buff));
+      }
+    }
+    end = clock();
+    close(p1[0]);
+    close(p2[1]);
   } else {
-    n = read(fds[0], buf, sizeof(buf));
-    write(1, buf, n);
+    close(p1[0]);
+    close(p2[1]);
+    start = clock();
+    for(i = 0; i < MAXITER; ++i) {
+      if(read(p2[0], buff, sizeof(buff)) > 0) {
+        write(p1[1], buff, sizeof(buff));
+      }
+    }
+    end = clock();
+    close(p2[0]);
+    close(p1[1]);
+    wait(0);
   }
-  exit();
+  rtt = (((double)(end - start)) / CLOCKS_PER_SEC) / MAXITER;
+  printf("average RTT: %f ms\n", (rtt * 1000));
+  rtt = 1.0 / rtt;
+  printf("RTT: %.05lf\n", rtt);
+  exit(0);
 }
