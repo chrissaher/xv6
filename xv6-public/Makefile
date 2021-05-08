@@ -184,7 +184,8 @@ UPROGS=\
 	_sleep\
 	_pingpong\
 	_primes\
-	_find
+	_find\
+	_xargs
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
