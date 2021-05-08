@@ -182,7 +182,8 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_sleep\
-	_pingpong
+	_pingpong\
+	_primes
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
